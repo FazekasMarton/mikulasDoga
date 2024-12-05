@@ -18,14 +18,13 @@ model children {
   name    String
   address String
   isGood  Boolean
-  toys toys[]
+  toys    toys[]  @relation("childrenToys")
 }
 
 model toys {
-  id Int @id @default(autoincrement())
-  name String
+  id       Int        @id @default(autoincrement())
+  name     String
   material String
-  weight Float
-  childId Int
-  children  children @relation(fields: [childId], references: [id])
+  weight   Float
+  children children[] @relation("childrenToys")
 }
