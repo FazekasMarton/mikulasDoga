@@ -14,7 +14,11 @@ export class ChildrenService {
   }
 
   async findAll() {
-    return await this.prisma.children.findMany();
+    return await this.prisma.children.findMany({
+      include: {
+        toys: true
+      }
+    });
   }
 
   async findOne(id: number) {
