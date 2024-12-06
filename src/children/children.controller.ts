@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ChildrenService } from './children.service';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
 
 @Controller('children')
 export class ChildrenController {
-  constructor(private readonly childrenService: ChildrenService) {}
+  constructor(private readonly childrenService: ChildrenService) { }
 
   @Post()
   create(@Body() createChildDto: CreateChildDto) {
@@ -22,9 +22,26 @@ export class ChildrenController {
     return this.childrenService.findOne(+id);
   }
 
+  @Put(':childId/toys/:toyId')
+  addToy(
+    @Param('childId') childId: string,
+    @Param('toyId') toyId: string
+  ) {
+    return this.childrenService.addToy(+childId, +toyId)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateChildDto: UpdateChildDto) {
     return this.childrenService.update(+id, updateChildDto);
+  }
+
+  
+  @Delete(':childId/toys/:toyId')
+  removeToy(
+    @Param('childId') childId: string,
+    @Param('toyId') toyId: string
+  ) {
+    return this.childrenService.removeToy(+childId, +toyId)
   }
 
   @Delete(':id')
