@@ -43,14 +43,14 @@ export class ChildrenService {
   }
 
   async update(id: number, updateChildDto: UpdateChildDto) {
-    try{
+    try {
       return await this.prisma.children.update({
         where: {
           id: id
         },
         data: updateChildDto
       });
-    }catch (error) {
+    } catch (error) {
       switch (error.code) {
         case "P2025":
           throw new HttpErrorByCode[404]("Not found")
@@ -69,32 +69,52 @@ export class ChildrenService {
   }
 
   async addToy(childId: number, toyId: number) {
-    return await this.prisma.children.update({
-      where: {
-        id: childId
-      },
-      data: {
-        toys: {
-          connect: {
-            id: toyId
+    try {
+      return await this.prisma.children.update({
+        where: {
+          id: childId
+        },
+        data: {
+          toys: {
+            connect: {
+              id: toyId
+            }
           }
         }
+      })
+    } catch (error) {
+      switch (error.code) {
+        case "P2025":
+        case "P2016":
+          throw new HttpErrorByCode[404]("Not found")
+        default:
+          throw new HttpErrorByCode[400]("Bad request")
       }
-    })
+    }
   }
 
   async removeToy(childId: number, toyId: number) {
-    return await this.prisma.children.update({
-      where: {
-        id: childId
-      },
-      data: {
-        toys: {
-          disconnect: {
-            id: toyId
+    try {
+      return await this.prisma.children.update({
+        where: {
+          id: childId
+        },
+        data: {
+          toys: {
+            disconnect: {
+              id: toyId
+            }
           }
         }
+      })
+    } catch (error) {
+      switch (error.code) {
+        case "P2025":
+        case "P2016":
+          throw new HttpErrorByCode[404]("Not found")
+        default:
+          throw new HttpErrorByCode[400]("Bad request")
       }
-    })
+    }
   }
 }
